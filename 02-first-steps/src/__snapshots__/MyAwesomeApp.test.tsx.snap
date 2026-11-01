@@ -1,0 +1,65 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MyAwesomeApp > should match snapshot - screen 1`] = `
+<div
+  data-testid="div-app"
+>
+  <h1
+    data-testid="first-name-title"
+  >
+    Iciar
+  </h1>
+  <h2>
+    Cabezuelo
+  </h2>
+  <p>
+    4
+  </p>
+  <p
+    class="mi-clase-favorita"
+  >
+    Kingdom Heart, Paleo Pines, Annimal Crossing
+  </p>
+  <h1>
+    Activo
+  </h1>
+  <p
+    style="background-color: rgba(124, 123, 123, 0.643); border-radius: 10px; padding: 10px;"
+  >
+    {"ziptCode":"ABC-123","country":"España"}
+  </p>
+</div>
+`;
+
+exports[`MyAwesomeApp > should match snapshot 1`] = `
+<div>
+  <div
+    data-testid="div-app"
+  >
+    <h1
+      data-testid="first-name-title"
+    >
+      Iciar
+    </h1>
+    <h2>
+      Cabezuelo
+    </h2>
+    <p>
+      4
+    </p>
+    <p
+      class="mi-clase-favorita"
+    >
+      Kingdom Heart, Paleo Pines, Annimal Crossing
+    </p>
+    <h1>
+      Activo
+    </h1>
+    <p
+      style="background-color: rgba(124, 123, 123, 0.643); border-radius: 10px; padding: 10px;"
+    >
+      {"ziptCode":"ABC-123","country":"España"}
+    </p>
+  </div>
+</div>
+`;
