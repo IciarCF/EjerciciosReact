@@ -5,7 +5,7 @@ import { HeroPage } from "@/heroes/pages/hero/HeroPage";
 import { HomePage } from "@/heroes/pages/home/HomePage";
 import { lazy } from "react";
 import { SearchPage } from "@/heroes/pages/search/SearchPage";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AdminPage = lazy(() => import("@/admin/pages/AdminPage"));
@@ -20,13 +20,17 @@ export const appRouter = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "heroes/1",
+        path: "heroes/:idSlug",
         element: <HeroPage />,
       },
       {
         path: "search",
         element: <SearchPage />,
       },
+      {
+        path: '*',
+        element: <Navigate to = "/"></Navigate>
+      }
     ],
   },
 
