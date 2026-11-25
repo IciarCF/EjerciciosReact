@@ -1,21 +1,25 @@
 import { Badge } from '@/components/ui/badge';
 import { Heart, Trophy, Users, Zap } from 'lucide-react';
 import { HeroStatCard } from './HeroStatCard';
+import { useHeroSummary } from '../hooks/useHeroSummary';
 
 export const HeroStats = () => {
+
+  const {data:summary} = useHeroSummary();
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <HeroStatCard
         title="Total de personajes"
         icon={<Users className="h-4 w-4 text-muted-foreground" />}
       >
-        <div className="text-2xl font-bold">16</div>
+        <div className="text-2xl font-bold">{summary?.totalHeroes}</div>
         <div className="flex gap-1 mt-2">
           <Badge variant="secondary" className="text-xs">
-            12 Heroes
+            {summary?.heroCount} heroes
           </Badge>
           <Badge variant="destructive" className="text-xs">
-            2 Villains
+            {summary?.villainCount} villanos
           </Badge>
         </div>
       </HeroStatCard>
@@ -24,6 +28,7 @@ export const HeroStats = () => {
         title="Favoritos"
         icon={<Heart className="h-4 w-4 text-muted-foreground" />}
       >
+        {/*Por hacer*/}
         <div className="text-2xl font-bold text-red-600">3</div>
         <p className="text-xs text-muted-foreground">18.8% of total</p>
       </HeroStatCard>
@@ -32,16 +37,20 @@ export const HeroStats = () => {
         title="El mas fuerte"
         icon={<Zap className="h-4 w-4 text-muted-foreground" />}
       >
-        <div className="text-lg font-bold">Superman</div>
-        <p className="text-xs text-muted-foreground">Fuerza: 10/10</p>
+        <div className="text-lg font-bold">{summary?.strongestHero.alias}</div>
+        <p className="text-xs text-muted-foreground">
+          Fuerza: {summary?.strongestHero.strength}
+        </p>
       </HeroStatCard>
 
       <HeroStatCard
         title="El mas inteligente"
         icon={<Trophy className="h-4 w-4 text-muted-foreground" />}
       >
-        <div className="text-lg font-bold">Batman</div>
-        <p className="text-xs text-muted-foreground">Inteligencia: 10/10</p>
+        <div className="text-lg font-bold">{summary?.smartestHero.alias}</div>
+        <p className="text-xs text-muted-foreground">
+          Inteligencia: {summary?.smartestHero.intelligence}
+        </p>
       </HeroStatCard>
     </div>
   );

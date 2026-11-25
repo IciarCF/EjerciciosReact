@@ -5,9 +5,10 @@ import { HeroGrid } from "@/heroes/components/HeroGrid";
 import { useMemo} from "react";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomBreadCrumbs } from "@/components/custom/CustomBreadCrumbs";
-import { getHeroesByPageActions } from "@/heroes/actions/get-heroes-by-pages-actions";
-import {  useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
+import { useHeroSummary } from "@/heroes/hooks/useHeroSummary";
+import { usePaginatedHero } from "@/heroes/hooks/usePaginatedHero";
+
 
 
 export const HomePage = () => {
@@ -17,6 +18,9 @@ export const HomePage = () => {
   console.log({searchParams})
 
   const activeTab = searchParams.get('tab') ?? 'all';
+  const page = searchParams.get('page') ?? '1';
+  const limit = searchParams.get('limit') ?? '6';
+
   const selectedTab = useMemo(() =>{
     const validTabs = ["all" , "favorites" , "heroes" , "villains"];
     return validTabs.includes(activeTab) ? activeTab: 'all'
@@ -24,11 +28,11 @@ export const HomePage = () => {
   
 
   
-  const { data: heroesResponse } = useQuery({
-    queryKey: ['heroes'],
-    queryFn: () => getHeroesByPageActions(),
-    staleTime: 1000 * 60 * 5 //5 min
-  })
+  const { data: heroesResponse } = usePaginatedHero(+page, +limit)
+
+  
+
+  const { data:summary} = useHeroSummary();
 
   console.log({heroesResponse});
 
@@ -43,35 +47,53 @@ export const HomePage = () => {
       <CustomBreadCrumbs currentPage="Super Heroes" />
       {/* Stats Dashboard */}
       <HeroStats />
-
       {/* Tabs */}
       <Tabs defaultValue={selectedTab} className="mb-8">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="all" onClick={() => setSearchParams((prev) => {
-            prev.set('tab','all')
-            return prev;
-          })}>All Characters (16)</TabsTrigger>
+          <TabsTrigger
+            value="all"
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set("tab", "all");
+                return prev;
+              })
+            }
+          >
+            All Characters ({summary?.totalHeroes})
+          </TabsTrigger>
           <TabsTrigger
             value="favorites"
             className="flex items-center gap-2"
-            onClick={() => setSearchParams((prev) => {
-            prev.set('tab','favorites')
-            return prev;
-          })}
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set("tab", "favorites");
+                return prev;
+              })
+            }
           >
             Favorites (3)
           </TabsTrigger>
-          <TabsTrigger value="heroes" onClick={() => setSearchParams((prev) => {
-            prev.set('tab','heroes')
-            return prev;
-          })}>
-            Heroes (12)
+          <TabsTrigger
+            value="heroes"
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set("tab", "heroes");
+                return prev;
+              })
+            }
+          >
+            Heroes ({summary?.heroCount})
           </TabsTrigger>
-          <TabsTrigger value="villains" onClick={() => setSearchParams((prev) => {
-            prev.set('tab','villains')
-            return prev;
-          })}>
-            Villains (2)
+          <TabsTrigger
+            value="villains"
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set("tab", "villains");
+                return prev;
+              })
+            }
+          >
+            Villains ({summary?.villainCount})
           </TabsTrigger>
         </TabsList>
 
@@ -96,9 +118,8 @@ export const HomePage = () => {
           <HeroGrid heroes={[]} />
         </TabsContent>
       </Tabs>
-
       {/* Pagination */}
-      <CustomPagination totalPage={8} />
+      <CustomPagination totalPage={heroesResponse?.pages ?? 1} />
     </>
   );
 }
